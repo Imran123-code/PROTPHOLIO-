@@ -81,34 +81,35 @@ export default function Certificates() {
   };
 
   return (
-    <section id="certifications" className="relative py-24 sm:py-32 overflow-hidden border-t border-slate-900">
+    <section id="certifications" className="relative py-20 sm:py-28 overflow-hidden border-t border-slate-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="flex flex-col items-center text-center mb-12">
+        <div className="flex flex-col items-center text-center mb-10 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 font-mono text-xs mb-3 shadow-[0_0_15px_rgba(0,242,254,0.15)]">
-            <Award className="w-3.5 h-3.5" />
-            <span>05 // VERIFIED CERTIFICATES & CREDENTIALS</span>
+            <Award className="w-3.5 h-3.5 shrink-0" />
+            <span>05 // VERIFIED CERTIFICATES &amp; CREDENTIALS</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl font-extrabold font-heading text-white tracking-tight">
-            Official Certificates & <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">Accreditations</span>
+          <h2
+            className="font-extrabold font-heading text-white tracking-tight"
+            style={{ fontSize: 'clamp(1.5rem, 5vw, 3rem)' }}
+          >
+            Official Certificates &amp; <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">Accreditations</span>
           </h2>
           
           <p className="text-slate-400 text-sm sm:text-base max-w-2xl mt-3 font-sans">
-            Complete credentials verified from official certificate declarations (Simplilearn & Microsoft) and authenticated LinkedIn profile certifications (Shell, AICTE, Edunet & Tata Group).
+            Complete credentials verified from official certificate declarations and authenticated LinkedIn profile certifications.
           </p>
 
-          <div className="w-20 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full mt-4"></div>
+          <div className="w-20 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full mt-4" />
         </div>
 
-        {/* ------------------------------------------------------------- */}
-        {/* INTERACTIVE CATEGORY FILTER BAR (Only Active Categories)      */}
-        {/* ------------------------------------------------------------- */}
-        <div className="mb-10 max-w-3xl mx-auto">
-          <div className="p-2 sm:p-2.5 rounded-2xl sm:rounded-full bg-slate-950/80 border border-slate-800/90 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex items-center justify-center">
+        {/* CATEGORY FILTER BAR */}
+        <div className="mb-8 sm:mb-10 max-w-3xl mx-auto">
+          <div className="p-2 sm:p-2.5 rounded-2xl sm:rounded-full bg-slate-950/80 border border-slate-800/90 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex items-center">
             
-            <div className="w-full overflow-x-auto no-scrollbar scroll-smooth flex items-center justify-start sm:justify-center gap-2 px-1 py-0.5">
+            <div className="w-full overflow-x-auto no-scrollbar scroll-smooth flex items-center gap-2 px-1 py-0.5">
               {availableFilters.map((filter) => {
                 const isActive = activeFilter === filter;
                 const count = getFilterCount(filter);
@@ -117,7 +118,7 @@ export default function Certificates() {
                     key={filter}
                     onClick={() => handleFilterClick(filter)}
                     onMouseEnter={() => playSound('hover')}
-                    className={`relative whitespace-nowrap px-4 py-2 rounded-full text-xs font-mono transition-all duration-200 flex items-center gap-2 cursor-pointer shrink-0 select-none ${
+                    className={`relative whitespace-nowrap px-4 py-2 rounded-full text-xs font-mono transition-all duration-200 flex items-center gap-2 cursor-pointer shrink-0 select-none touch-manipulation ${
                       isActive
                         ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-bold shadow-[0_0_20px_rgba(0,242,254,0.45)] scale-102'
                         : 'bg-slate-900/60 text-slate-400 hover:text-slate-100 hover:bg-slate-800/80 border border-slate-800/60'
@@ -125,7 +126,7 @@ export default function Certificates() {
                   >
                     <span>{filter}</span>
                     <span
-                      className={`text-[10px] px-1.5 py-0.2 rounded-full font-sans transition-colors ${
+                      className={`text-[10px] px-1.5 py-0.5 rounded-full font-sans transition-colors ${
                         isActive
                           ? 'bg-slate-950/30 text-slate-950 font-semibold'
                           : 'bg-slate-800/80 text-slate-400'
@@ -154,11 +155,9 @@ export default function Certificates() {
           </div>
         </div>
 
-        {/* ------------------------------------------------------------- */}
-        {/* CERTIFICATE CARDS GRID (3D TILT + GLASSMORPHISM)               */}
-        {/* ------------------------------------------------------------- */}
+        {/* CERTIFICATE CARDS GRID */}
         <div
-          className={`grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto transition-all duration-300 ease-out ${
+          className={`grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8 max-w-5xl mx-auto transition-all duration-300 ease-out ${
             isAnimating ? 'opacity-40 scale-[0.98]' : 'opacity-100 scale-100'
           }`}
         >

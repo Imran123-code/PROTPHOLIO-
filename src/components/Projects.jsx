@@ -195,18 +195,21 @@ export default function Projects() {
   };
 
   return (
-    <section id="projects" className="relative py-24 sm:py-32 overflow-hidden border-t border-slate-900">
+    <section id="projects" className="relative py-20 sm:py-28 overflow-hidden border-t border-slate-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
         <div className="flex flex-col items-center text-center mb-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 font-mono text-xs mb-3 shadow-[0_0_15px_rgba(0,242,254,0.15)]">
-            <FolderGit2 className="w-3.5 h-3.5" />
+            <FolderGit2 className="w-3.5 h-3.5 shrink-0" />
             <span>04 // GITHUB REPOSITORIES</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl font-extrabold font-heading text-white tracking-tight">
-            Engineering & <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">Software Projects</span>
+          <h2
+            className="font-extrabold font-heading text-white tracking-tight"
+            style={{ fontSize: 'clamp(1.5rem, 5vw, 3rem)' }}
+          >
+            Engineering &amp; <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">Software Projects</span>
           </h2>
           
           <p className="text-slate-400 text-sm sm:text-base max-w-2xl mt-3 font-sans">
@@ -222,11 +225,11 @@ export default function Projects() {
             ). Priority-ranked with highest-value projects first.
           </p>
 
-          <div className="w-20 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full mt-4"></div>
+          <div className="w-20 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full mt-4" />
 
           {/* GitHub Live Status Badge */}
           <div className="mt-4 flex items-center gap-2 text-xs font-mono text-slate-400 bg-slate-900/60 px-3.5 py-1 rounded-full border border-slate-800">
-            <span className={`w-2 h-2 rounded-full ${isLive ? 'bg-emerald-400 animate-pulse' : 'bg-cyan-400'}`}></span>
+            <span className={`w-2 h-2 rounded-full shrink-0 ${isLive ? 'bg-emerald-400 animate-pulse' : 'bg-cyan-400'}`} />
             <span>{isLive ? 'Live GitHub Sync Connected' : 'Verified GitHub Dataset Active'}</span>
           </div>
         </div>
@@ -308,9 +311,9 @@ export default function Projects() {
               </div>
             </div>
 
-            {/* Quick Search Tag Suggestions */}
-            <div className="flex flex-wrap items-center justify-center gap-1.5 mt-3 text-xs font-mono text-slate-400">
-              <span className="text-[11px] text-slate-500 mr-1 flex items-center gap-1">
+            {/* Quick Search Tag Suggestions — horizontal scroll on mobile */}
+            <div className="flex items-center gap-1.5 mt-3 text-xs font-mono text-slate-400 overflow-x-auto no-scrollbar pb-1 -mx-1 px-1">
+              <span className="text-[11px] text-slate-500 mr-1 flex items-center gap-1 shrink-0">
                 <Sparkles className="w-3 h-3 text-cyan-400" />
                 <span>Quick:</span>
               </span>
@@ -322,7 +325,7 @@ export default function Projects() {
                     type="button"
                     onClick={() => handleQuickSearch(tag.toLowerCase())}
                     onMouseEnter={() => playSound('hover')}
-                    className={`px-2.5 py-0.5 rounded-full text-[11px] font-mono transition-all duration-200 cursor-pointer ${
+                    className={`px-2.5 py-0.5 rounded-full text-[11px] font-mono transition-all duration-200 cursor-pointer shrink-0 touch-manipulation ${
                       isSelected
                         ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/50 shadow-[0_0_10px_rgba(0,242,254,0.3)]'
                         : 'bg-slate-900/60 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-cyan-300'
@@ -405,11 +408,9 @@ export default function Projects() {
           </div>
         </div>
 
-        {/* ------------------------------------------------------------- */}
-        {/* 3D PROJECT CARDS GRID WITH SMOOTH FADE + SCALE ANIMATION       */}
-        {/* ------------------------------------------------------------- */}
+        {/* PROJECT CARDS GRID */}
         <div
-          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-300 ease-out ${
+          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 transition-all duration-300 ease-out ${
             isAnimating ? 'opacity-40 scale-[0.98]' : 'opacity-100 scale-100'
           }`}
         >

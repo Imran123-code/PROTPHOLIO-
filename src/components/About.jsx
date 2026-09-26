@@ -19,19 +19,22 @@ export default function About({ onOpenResume }) {
   const [selectedBubble, setSelectedBubble] = useState(null);
 
   return (
-    <section id="about" className="relative py-24 sm:py-32 overflow-hidden border-t border-slate-900">
+    <section id="about" className="relative py-20 sm:py-28 overflow-hidden border-t border-slate-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
-        <div className="flex flex-col items-center text-center mb-16">
+        <div className="flex flex-col items-center text-center mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 font-mono text-xs mb-3 shadow-[0_0_15px_rgba(0,242,254,0.15)]">
-            <User className="w-3.5 h-3.5" />
+            <User className="w-3.5 h-3.5 shrink-0" />
             <span>01 // ABOUT ME</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-extrabold font-heading text-white tracking-tight">
-            Engineering Solutions & <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">Data Analytics</span>
+          <h2
+            className="font-extrabold font-heading text-white tracking-tight"
+            style={{ fontSize: 'clamp(1.5rem, 5vw, 3rem)' }}
+          >
+            Engineering Solutions &amp; <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">Data Analytics</span>
           </h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full mt-4"></div>
+          <div className="w-20 h-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full mt-4" />
         </div>
 
         {/* 3D Holographic Card Grid */}
@@ -77,23 +80,18 @@ export default function About({ onOpenResume }) {
                 </div>
 
                 {/* Verified Resume Badges */}
-                <div className="space-y-2.5 font-mono text-xs text-slate-300 border-t border-slate-800/80 pt-4">
-                  <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                    <span className="text-slate-400">Academic Program:</span>
-                    <span className="text-cyan-300 font-semibold">{personalInfo.degree}</span>
-                  </div>
-                  <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                    <span className="text-slate-400">Timeline / Batch:</span>
-                    <span className="text-emerald-400 font-semibold">{personalInfo.educationPeriod}</span>
-                  </div>
-                  <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                    <span className="text-slate-400">GitHub Activity:</span>
-                    <span className="text-violet-300 font-semibold">41+ Public Repositories</span>
-                  </div>
-                  <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                    <span className="text-slate-400">Location:</span>
-                    <span className="text-slate-200 font-semibold">{personalInfo.location}</span>
-                  </div>
+                <div className="space-y-2 font-mono text-xs text-slate-300 border-t border-slate-800/80 pt-4">
+                  {[
+                    { label: 'Academic Program:', value: personalInfo.degree, color: 'text-cyan-300' },
+                    { label: 'Timeline / Batch:', value: personalInfo.educationPeriod, color: 'text-emerald-400' },
+                    { label: 'GitHub Activity:', value: '41+ Public Repositories', color: 'text-violet-300' },
+                    { label: 'Location:', value: personalInfo.location, color: 'text-slate-200' },
+                  ].map(({ label, value, color }) => (
+                    <div key={label} className="flex flex-col xs:flex-row xs:items-center xs:justify-between gap-1 p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
+                      <span className="text-slate-400 shrink-0">{label}</span>
+                      <span className={`${color} font-semibold text-right break-words max-w-[60%] xs:max-w-none`}>{value}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
 

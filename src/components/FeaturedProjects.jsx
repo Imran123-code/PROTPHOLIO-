@@ -64,38 +64,38 @@ export default function FeaturedProjects() {
                     </span>
                   </div>
 
-                  <h3 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading text-white tracking-tight leading-tight mb-3">
+                  <h3 className="text-2xl xs:text-3xl sm:text-4xl lg:text-5xl font-black font-heading text-white tracking-tight leading-tight mb-3">
                     {flagship.title}
                   </h3>
 
-                  <h4 className="text-base sm:text-lg font-mono text-cyan-400 font-medium mb-6">
+                  <h4 className="text-sm sm:text-lg font-mono text-cyan-400 font-medium mb-4 sm:mb-6">
                     {flagship.tagline}
                   </h4>
 
-                  <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-sans mb-8">
+                  <p className="text-slate-300 text-xs sm:text-base leading-relaxed font-sans mb-6 sm:mb-8">
                     {flagship.description}
                   </p>
 
                   {/* Key Metrics Row */}
-                  <div className="grid grid-cols-3 gap-3 mb-8 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800">
+                  <div className="grid grid-cols-3 gap-1.5 sm:gap-3 mb-6 sm:mb-8 p-2.5 sm:p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800">
                     {flagship.keyMetrics.map((km, idx) => (
                       <div key={idx} className="text-center sm:text-left">
-                        <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">{km.label}</div>
+                        <div className="text-[9px] sm:text-[10px] font-mono text-slate-400 uppercase tracking-wider truncate">{km.label}</div>
                         <div className="text-xs sm:text-sm font-mono font-bold text-cyan-300 mt-0.5">{km.value}</div>
                       </div>
                     ))}
                   </div>
 
                   {/* Technology Badges */}
-                  <div className="mb-8">
+                  <div className="mb-6 sm:mb-8">
                     <div className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">
                       Core Technologies
                     </div>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {flagship.technologies.map((t, i) => (
                         <span
                           key={i}
-                          className="px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-slate-200"
+                          className="px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-slate-200"
                         >
                           {t}
                         </span>
@@ -105,14 +105,14 @@ export default function FeaturedProjects() {
                 </div>
 
                 {/* Primary Action Buttons */}
-                <div className="flex flex-wrap items-center gap-4 pt-6 border-t border-slate-800/80">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 pt-6 border-t border-slate-800/80">
                   {flagship.liveUrl && (
                     <a
                       href={flagship.liveUrl}
                       target="_blank"
                       rel="noreferrer"
                       onMouseEnter={() => playSound('hover')}
-                      className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 text-slate-950 font-mono font-bold text-sm flex items-center gap-2 shadow-[0_0_25px_rgba(0,242,254,0.4)] hover:shadow-[0_0_40px_rgba(0,242,254,0.6)] hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
+                      className="w-full sm:w-auto justify-center px-5 py-3 sm:px-6 sm:py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 text-slate-950 font-mono font-bold text-xs sm:text-sm flex items-center gap-2 shadow-[0_0_25px_rgba(0,242,254,0.4)] hover:shadow-[0_0_40px_rgba(0,242,254,0.6)] hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
                     >
                       <ExternalLink className="w-4 h-4" />
                       <span>Launch Live Web Store</span>
@@ -124,7 +124,7 @@ export default function FeaturedProjects() {
                     target="_blank"
                     rel="noreferrer"
                     onMouseEnter={() => playSound('hover')}
-                    className="px-6 py-3.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:text-white hover:border-cyan-500/50 font-mono font-semibold text-sm flex items-center gap-2 transition-all cursor-pointer"
+                    className="w-full sm:w-auto justify-center px-5 py-3 sm:px-6 sm:py-3.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:text-white hover:border-cyan-500/50 font-mono font-semibold text-xs sm:text-sm flex items-center gap-2 transition-all cursor-pointer"
                   >
                     <Github className="w-4 h-4 text-cyan-400" />
                     <span>View GitHub Source</span>
@@ -219,6 +219,7 @@ function FeaturedSubCard({ project, index }) {
   const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseMove = (e) => {
+    if (window.matchMedia && window.matchMedia('(hover: none)').matches) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width - 0.5) * 12;
     const y = ((e.clientY - rect.top) / rect.height - 0.5) * -12;

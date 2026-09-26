@@ -25,24 +25,25 @@ export default function ResumeModal({ isOpen, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Control Bar */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md">
-          <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-red-500/80"></span>
-            <span className="w-3 h-3 rounded-full bg-yellow-500/80"></span>
-            <span className="w-3 h-3 rounded-full bg-emerald-500/80"></span>
-            <span className="ml-3 text-sm font-mono text-cyan-400 font-medium tracking-wide">
-              {personalInfo.name} — Official Resume
+        <div className="flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md">
+          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+            <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-500/80 shrink-0"></span>
+            <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-500/80 shrink-0"></span>
+            <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-emerald-500/80 shrink-0"></span>
+            <span className="ml-2 sm:ml-3 text-xs sm:text-sm font-mono text-cyan-400 font-medium tracking-wide truncate">
+              {personalInfo.name} — Resume
             </span>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <button
               onClick={handlePrint}
-              className="px-4 py-1.5 text-xs font-mono font-medium rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 hover:from-cyan-400 hover:to-blue-500 transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,242,254,0.4)] cursor-pointer"
+              className="px-2.5 sm:px-4 py-1.5 text-xs font-mono font-medium rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 hover:from-cyan-400 hover:to-blue-500 transition-all flex items-center gap-1 sm:gap-1.5 shadow-[0_0_15px_rgba(0,242,254,0.4)] cursor-pointer"
               title="Print or Save as PDF"
             >
               <Printer className="w-3.5 h-3.5" />
-              <span>Print / Save as PDF</span>
+              <span className="hidden xs:inline">Print / Save as PDF</span>
+              <span className="xs:hidden">Print</span>
             </button>
             <button
               onClick={() => { playSound('click'); onClose(); }}

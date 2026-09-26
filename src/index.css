@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* ── Custom `xs` breakpoint (475px) ──────────────────────────── */
+@custom-media --xs (min-width: 475px);
+
 :root {
   color-scheme: dark;
 }
@@ -8,8 +11,9 @@ html {
   scroll-behavior: smooth;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   background-color: #030712;
-  /* Prevent layout shifts from font loading */
   font-display: swap;
+  /* Prevent horizontal overflow on mobile */
+  overflow-x: hidden;
 }
 
 body {
@@ -18,11 +22,12 @@ body {
   overflow-x: hidden;
   background-color: #020617;
   color: #f8fafc;
-  /* Paint containment — browser can skip painting hidden sections */
   contain: paint;
+  /* Smooth scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Typography Classes */
+/* ── Typography ──────────────────────────────────────────────── */
 .font-heading {
   font-family: 'Space Grotesk', sans-serif;
 }
@@ -31,9 +36,9 @@ body {
   font-family: 'JetBrains Mono', monospace;
 }
 
-/* Custom Cyber Scrollbar */
+/* ── Scrollbar ───────────────────────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-track {
@@ -50,7 +55,7 @@ body {
   background: #00f2fe;
 }
 
-/* Glassmorphism utility */
+/* ── Glassmorphism utilities ─────────────────────────────────── */
 .glass-panel {
   background: rgba(2, 6, 23, 0.7);
   backdrop-filter: blur(16px);
@@ -66,8 +71,54 @@ body {
   box-shadow: 0 0 30px rgba(0, 242, 254, 0.1);
 }
 
-/* ─── Keyframe Animations ─────────────────────────────────────────────────── */
+/* ── Prevent horizontal overflow globally ───────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
+/* No element should create unexpected overflow */
+section,
+header,
+footer,
+main,
+nav {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Images always responsive */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Canvas (Three.js / WebGL) — never overflow */
+canvas {
+  max-width: 100% !important;
+  display: block;
+}
+
+/* ── Horizontal scroll for filter bars (no page-wide scrollbar) */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Touch targets — minimum 44px tap target (Apple HIG) ──────── */
+button,
+a,
+[role="button"] {
+  touch-action: manipulation;
+}
+
+/* ── Keyframe Animations ─────────────────────────────────────── */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50%       { transform: translateY(-8px); }
@@ -85,7 +136,7 @@ body {
 
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(0.97) translateY(4px); }
-  to   { opacity: 1; transform: scale(1)    translateY(0); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 @keyframes slideInUp {
@@ -93,8 +144,7 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ─── Animation Utility Classes ───────────────────────────────────────────── */
-
+/* ── Animation Utilities ─────────────────────────────────────── */
 .animate-float {
   animation: float 4s ease-in-out infinite;
   will-change: transform;
@@ -105,7 +155,6 @@ body {
   will-change: transform;
 }
 
-/* "bounce-slow" reuses float keyframes at a slower cadence */
 .animate-bounce-slow {
   animation: float 6s ease-in-out infinite;
   will-change: transform;
@@ -119,14 +168,49 @@ body {
   animation: slideInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* ─── Performance: promote static decorative layers to their own layer ──────
-   These large blur divs are GPU-composited — promoting avoids repaints.     */
 .bg-blur-layer {
   will-change: opacity;
   transform: translateZ(0);
 }
 
-/* ─── Reduced motion: disable all animations for accessibility ──────────── */
+/* ── Disable 3D tilt on touch devices ──────────────────────────
+   JS mouse events (onMouseMove tilt) have no effect on touch,
+   but we also force the transform back to flat so any residual
+   style attribute is neutralised.                               */
+@media (hover: none) and (pointer: coarse) {
+  /* Card tilt wrappers — remove any inline transform */
+  [data-tilt] {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ── Tailwind xs: breakpoint shim ───────────────────────────── */
+/* Tailwind v4 allows custom breakpoints via @theme */
+@theme {
+  --breakpoint-xs: 475px;
+}
+
+/* ── Responsive font-size helpers ───────────────────────────── */
+.text-fluid-hero {
+  font-size: clamp(2rem, 7vw, 4.5rem);
+}
+
+.text-fluid-section {
+  font-size: clamp(1.5rem, 5vw, 3rem);
+}
+
+.text-fluid-sub {
+  font-size: clamp(0.875rem, 2.5vw, 1.25rem);
+}
+
+/* ── Skills section: prevent card overflow ──────────────────── */
+.skill-card-name {
+  word-break: break-word;
+  hyphens: auto;
+}
+
+/* ── Reduced motion ─────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -143,16 +227,10 @@ body {
   }
 }
 
-/* ─── Print Styles for Resume ─────────────────────────────────────────────── */
+/* ── Print ──────────────────────────────────────────────────── */
 @media print {
   body {
     background-color: white !important;
-    color: black !important;
-  }
-  header, footer, #home, #about, #skills, #projects, #experience, #achievements, #contact, #certifications {
-    display: none !important;
-  }
-  .print-text-black {
     color: black !important;
   }
 }
