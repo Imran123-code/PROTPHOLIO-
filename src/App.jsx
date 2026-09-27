@@ -79,7 +79,7 @@ export default function App() {
       {/* Cyber Glowing Trailing Cursor — desktop only, hardware-accelerated */}
       <div
         aria-hidden="true"
-        className="hidden md:block pointer-events-none fixed z-50 rounded-full"
+        className="hidden md:block pointer-events-none fixed z-[60] rounded-full"
         style={{
           left: 0,
           top: 0,
@@ -98,7 +98,7 @@ export default function App() {
       <Navbar onOpenResume={() => setIsResumeOpen(true)} />
 
       {/* Main Portfolio Sections */}
-      <main className="relative z-10">
+      <main className="relative z-0">
         {/* Hero is eagerly loaded — it IS the LCP */}
         <Hero onOpenResume={() => setIsResumeOpen(true)} />
 

@@ -88,7 +88,7 @@ export default function Certificates() {
         <div className="flex flex-col items-center text-center mb-10 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 font-mono text-xs mb-3 shadow-[0_0_15px_rgba(0,242,254,0.15)]">
             <Award className="w-3.5 h-3.5 shrink-0" />
-            <span>05 // VERIFIED CERTIFICATES &amp; CREDENTIALS</span>
+            <span>07 // VERIFIED CERTIFICATES &amp; CREDENTIALS</span>
           </div>
 
           <h2
@@ -437,21 +437,21 @@ function CertificateCard({ certificate, copiedId, onCopyId, onPreview }) {
       </div>
 
       {/* Card Footer: Credential ID & Action Buttons */}
-      <div className="pt-4 border-t border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        
-        {/* Certificate Code / Credential ID */}
-        <div className="flex items-center gap-1.5 bg-slate-900/90 border border-slate-800 px-2.5 py-1.5 rounded-xl">
-          <span className="text-[10px] font-mono text-slate-500">
-            {certificate.source === 'screenshot' ? 'Certificate Code:' : 'Credential ID:'}
+      <div className="pt-4 border-t border-slate-800/80 flex flex-col gap-3">
+
+        {/* Credential ID row — full width with truncation */}
+        <div className="flex items-center gap-1.5 min-w-0 bg-slate-900/90 border border-slate-800 px-2.5 py-1.5 rounded-xl overflow-hidden">
+          <span className="text-[10px] font-mono text-slate-500 shrink-0 whitespace-nowrap">
+            {certificate.source === 'screenshot' ? 'Code:' : 'ID:'}
           </span>
-          <span className="text-[11px] font-mono text-slate-200 font-bold select-all">
+          <span className="text-[11px] font-mono text-slate-200 font-bold select-all truncate min-w-0 flex-1">
             {certificate.credentialId}
           </span>
           <button
             type="button"
             onClick={(e) => onCopyId(e, certificate.credentialId)}
             title="Copy Credential ID"
-            className="text-slate-400 hover:text-cyan-400 ml-1 p-0.5 transition-colors cursor-pointer"
+            className="text-slate-400 hover:text-cyan-400 p-0.5 shrink-0 transition-colors cursor-pointer"
           >
             {copiedId === certificate.credentialId ? (
               <Check className="w-3.5 h-3.5 text-emerald-400" />
@@ -461,28 +461,35 @@ function CertificateCard({ certificate, copiedId, onCopyId, onPreview }) {
           </button>
         </div>
 
-        {/* View Credential Button (if URL exists) OR View Certificate (Modal if screenshot) */}
-        <div>
-          {certificate.credentialUrl ? (
+        {/* Action buttons row */}
+        <div className="flex items-center gap-2 flex-wrap">
+          {certificate.image && (
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); onPreview(certificate); }}
+              className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-mono text-xs font-bold transition-all shadow-[0_0_15px_rgba(0,242,254,0.3)] hover:shadow-[0_0_20px_rgba(0,242,254,0.45)] cursor-pointer"
+            >
+              <ZoomIn className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>View Certificate</span>
+            </button>
+          )}
+
+          {certificate.credentialUrl && (
             <a
               href={certificate.credentialUrl}
               target="_blank"
               rel="noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-mono text-xs font-bold transition-all shadow-[0_0_15px_rgba(0,242,254,0.3)] hover:shadow-[0_0_20px_rgba(0,242,254,0.45)] cursor-pointer"
+              title="Verify Credential"
+              className="inline-flex items-center justify-center gap-1 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-cyan-300 font-mono text-xs font-semibold transition-all border border-slate-700 hover:border-cyan-500/50 cursor-pointer shrink-0"
             >
-              <span>View Credential</span>
-              <ExternalLink className="w-3.5 h-3.5 stroke-[2.5]" />
+              <ExternalLink className="w-3.5 h-3.5" />
+              <span>Verify</span>
             </a>
-          ) : (
-            <button
-              type="button"
-              onClick={(e) => { e.stopPropagation(); onPreview(certificate); }}
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-mono text-xs font-bold transition-all shadow-[0_0_15px_rgba(0,242,254,0.3)] hover:shadow-[0_0_20px_rgba(0,242,254,0.45)] cursor-pointer"
-            >
-              <ZoomIn className="w-3.5 h-3.5 stroke-[2.5]" />
-              <span>View Certificate</span>
-            </button>
+          )}
+
+          {!certificate.image && !certificate.credentialUrl && (
+            <span className="text-xs font-mono text-slate-500 italic">No preview available</span>
           )}
         </div>
 
@@ -529,6 +536,30 @@ function OrganizationEmblem({ org, className = "w-5 h-5" }) {
     return (
       <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600/30 via-blue-400/20 to-indigo-500/30 border border-blue-500/40 flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.25)]">
         <span className="font-heading font-black text-[11px] tracking-tight text-blue-300">S</span>
+      </div>
+    );
+  }
+
+  if (org === 'ibm') {
+    return (
+      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-700/40 via-blue-500/20 to-cyan-600/30 border border-blue-600/50 flex items-center justify-center shadow-[0_0_15px_rgba(37,99,235,0.3)]">
+        <span className="font-heading font-black text-[11px] tracking-tight text-blue-200">IBM</span>
+      </div>
+    );
+  }
+
+  if (org === 'govt') {
+    return (
+      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500/30 via-white/5 to-green-600/30 border border-orange-400/40 flex items-center justify-center shadow-[0_0_15px_rgba(249,115,22,0.25)]">
+        <span className="font-heading font-black text-[10px] tracking-tight text-orange-300">GOI</span>
+      </div>
+    );
+  }
+
+  if (org === 'sou') {
+    return (
+      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600/30 via-violet-400/20 to-indigo-600/30 border border-purple-500/40 flex items-center justify-center shadow-[0_0_15px_rgba(147,51,234,0.25)]">
+        <span className="font-heading font-black text-[10px] tracking-tight text-purple-300">SOU</span>
       </div>
     );
   }
