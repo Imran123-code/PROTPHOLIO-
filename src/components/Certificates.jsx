@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Award, Calendar, ShieldCheck, Copy, Check, Filter, Sparkles, AlertCircle, ZoomIn, X, ExternalLink, Download, FileBadge2 } from 'lucide-react';
 import { certificationsData } from '../data/portfolioData';
 import { playSound } from '../utils/soundEffects';
@@ -22,15 +23,25 @@ export default function Certificates() {
   const [isAnimating, setIsAnimating] = useState(false);
   const [selectedCertificate, setSelectedCertificate] = useState(null);
 
-  // Keyboard shortcut listener to close image modal on Escape key
+  // Keyboard shortcut listener to close image modal on Escape key & scroll lock
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && selectedCertificate) {
         setSelectedCertificate(null);
       }
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+
+    if (selectedCertificate) {
+      document.body.style.overflow = 'hidden';
+      window.addEventListener('keydown', handleKeyDown);
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [selectedCertificate]);
 
   // Compute active filters: Only include a category if at least one certificate belongs to it
@@ -81,7 +92,8 @@ export default function Certificates() {
   };
 
   return (
-    <section id="certifications" className="relative py-20 sm:py-28 overflow-hidden border-t border-slate-900">
+    <section id="certificates" className="scroll-mt-24 relative py-20 sm:py-28 overflow-hidden border-t border-slate-900">
+      <div id="certifications" className="scroll-mt-24 absolute top-0 left-0" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
@@ -204,44 +216,55 @@ export default function Certificates() {
       {/* ------------------------------------------------------------- */}
       {/* HIGH-RES CERTIFICATE PREVIEW MODAL LIGHTBOX                   */}
       {/* ------------------------------------------------------------- */}
-      {selectedCertificate && (
+      {selectedCertificate && typeof document !== 'undefined' && createPortal(
         <div
           role="dialog"
           aria-modal="true"
           aria-labelledby="certificate-modal-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/90 backdrop-blur-md animate-fade-in select-none"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-slate-950/90 backdrop-blur-xl animate-fade-in select-none"
           onClick={() => setSelectedCertificate(null)}
         >
           <div
-            className="relative w-full max-w-4xl bg-slate-900/95 border border-cyan-500/40 rounded-3xl shadow-[0_0_60px_rgba(0,242,254,0.3)] overflow-hidden flex flex-col max-h-[92vh]"
+            className="relative w-full max-w-4xl bg-slate-900/98 border border-cyan-500/40 rounded-3xl shadow-[0_0_80px_rgba(0,242,254,0.35)] overflow-hidden flex flex-col max-h-[92vh]"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
-            <div className="px-5 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/80">
-              <div className="flex items-center gap-3">
+            <div className="px-5 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/90">
+              <div className="flex items-center gap-3 min-w-0">
                 <OrganizationEmblem org={selectedCertificate.orgLogo} />
-                <div>
-                  <h3 id="certificate-modal-title" className="text-base sm:text-lg font-bold font-heading text-white">
+                <div className="min-w-0">
+                  <h3 id="certificate-modal-title" className="text-sm sm:text-base font-bold font-heading text-white truncate">
                     {selectedCertificate.title}
                   </h3>
-                  <p className="text-xs font-mono text-cyan-400/90">
+                  <p className="text-xs font-mono text-cyan-400/90 truncate">
                     {selectedCertificate.organization} • {selectedCertificate.issueDate}
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 shrink-0">
                 {selectedCertificate.image && (
-                  <a
-                    href={selectedCertificate.image}
-                    target="_blank"
-                    rel="noreferrer"
-                    download
-                    title="Download Certificate Image"
-                    className="p-2 rounded-xl bg-slate-800 hover:bg-cyan-500 text-slate-300 hover:text-slate-950 transition-colors flex items-center justify-center cursor-pointer"
-                  >
-                    <Download className="w-4 h-4" />
-                  </a>
+                  <>
+                    <a
+                      href={selectedCertificate.image}
+                      target="_blank"
+                      rel="noreferrer"
+                      title="Open Full Image in New Tab"
+                      className="p-2 rounded-xl bg-slate-800 hover:bg-cyan-500 text-slate-300 hover:text-slate-950 transition-colors flex items-center justify-center cursor-pointer"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                    <a
+                      href={selectedCertificate.image}
+                      target="_blank"
+                      rel="noreferrer"
+                      download={`${selectedCertificate.id}.png`}
+                      title="Download Certificate Image"
+                      className="p-2 rounded-xl bg-slate-800 hover:bg-cyan-500 text-slate-300 hover:text-slate-950 transition-colors flex items-center justify-center cursor-pointer"
+                    >
+                      <Download className="w-4 h-4" />
+                    </a>
+                  </>
                 )}
 
                 <button
@@ -256,19 +279,27 @@ export default function Certificates() {
             </div>
 
             {/* Modal Body: Distortion-Free High-Res Certificate Image */}
-            <div className="p-4 sm:p-6 overflow-y-auto flex items-center justify-center bg-slate-950/40">
-              <div className="relative group max-w-full">
-                <img
-                  src={selectedCertificate.image}
-                  alt={`${selectedCertificate.title} issued by ${selectedCertificate.organization}`}
-                  className="w-auto max-h-[68vh] max-w-full object-contain rounded-xl border border-slate-700/80 shadow-2xl"
-                  loading="eager"
-                />
-              </div>
+            <div className="p-4 sm:p-6 overflow-y-auto flex items-center justify-center bg-slate-950/60 min-h-[300px]">
+              {selectedCertificate.image ? (
+                <div className="relative group max-w-full flex items-center justify-center">
+                  <img
+                    src={selectedCertificate.image}
+                    alt={`${selectedCertificate.title} issued by ${selectedCertificate.organization}`}
+                    className="w-auto max-h-[68vh] max-w-full object-contain rounded-xl border border-slate-700/80 shadow-2xl"
+                    loading="eager"
+                  />
+                </div>
+              ) : (
+                <div className="text-center py-12 px-6">
+                  <FileBadge2 className="w-16 h-16 text-cyan-400 mx-auto mb-3 opacity-60" />
+                  <p className="text-white font-medium text-sm">Verified Official Certificate</p>
+                  <p className="text-slate-400 text-xs font-mono mt-1">Credential ID: {selectedCertificate.credentialId}</p>
+                </div>
+              )}
             </div>
 
             {/* Modal Footer: Credential Information */}
-            <div className="px-5 py-3.5 border-t border-slate-800/80 bg-slate-950/80 flex flex-wrap items-center justify-between text-xs font-mono text-slate-400 gap-3">
+            <div className="px-5 py-3.5 border-t border-slate-800/80 bg-slate-950/90 flex flex-wrap items-center justify-between text-xs font-mono text-slate-400 gap-3">
               <div className="flex items-center gap-2">
                 <span className="text-slate-500">Certificate Code:</span>
                 <span className="text-cyan-300 font-bold bg-slate-900 px-2 py-0.5 rounded border border-slate-800 select-all">
@@ -295,7 +326,8 @@ export default function Certificates() {
             </div>
 
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
     </section>

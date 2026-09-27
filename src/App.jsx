@@ -5,17 +5,18 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Background3D from './components/Background3D';
 
+import Certificates from './components/Certificates';
+import ResumeModal from './components/ResumeModal';
+
 // ─── Lazily loaded (below-the-fold) ──────────────────────────────────────────
 const About       = lazy(() => import('./components/About'));
 const Skills      = lazy(() => import('./components/Skills'));
 const FeaturedProjects = lazy(() => import('./components/FeaturedProjects'));
 const Projects    = lazy(() => import('./components/Projects'));
-const Certificates = lazy(() => import('./components/Certificates'));
 const Experience  = lazy(() => import('./components/Experience'));
 const Achievements = lazy(() => import('./components/Achievements'));
 const Contact     = lazy(() => import('./components/Contact'));
 const Footer      = lazy(() => import('./components/Footer'));
-const ResumeModal = lazy(() => import('./components/ResumeModal'));
 
 // ─── Lightweight section skeleton shown during lazy-load ─────────────────────
 function SectionSkeleton() {
@@ -115,9 +116,7 @@ export default function App() {
         <Suspense fallback={<SectionSkeleton />}>
           <Projects />
         </Suspense>
-        <Suspense fallback={<SectionSkeleton />}>
-          <Certificates />
-        </Suspense>
+        <Certificates />
         <Suspense fallback={<SectionSkeleton />}>
           <Experience />
         </Suspense>
@@ -135,12 +134,10 @@ export default function App() {
       </Suspense>
 
       {/* Interactive Printable & Downloadable Resume Modal */}
-      <Suspense fallback={null}>
-        <ResumeModal
-          isOpen={isResumeOpen}
-          onClose={() => setIsResumeOpen(false)}
-        />
-      </Suspense>
+      <ResumeModal
+        isOpen={isResumeOpen}
+        onClose={() => setIsResumeOpen(false)}
+      />
 
     </div>
   );

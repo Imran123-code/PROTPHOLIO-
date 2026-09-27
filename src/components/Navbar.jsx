@@ -7,7 +7,7 @@ const NAV_ITEMS = [
   { label: 'About', href: '#about' },
   { label: 'Skills', href: '#skills' },
   { label: 'Projects', href: '#projects' },
-  { label: 'Certificates', href: '#certifications' },
+  { label: 'Certificates', href: '#certificates' },
   { label: 'Experience', href: '#experience' },
   { label: 'Achievements', href: '#achievements' },
   { label: 'Contact', href: '#contact' }
@@ -32,7 +32,9 @@ export default function Navbar({ onOpenResume }) {
 
         const scrollPos = window.scrollY + 180;
         for (let i = sections.length - 1; i >= 0; i--) {
-          const secEl = document.getElementById(sections[i]);
+          const secId = sections[i];
+          let secEl = document.getElementById(secId);
+          if (!secEl && secId === 'certificates') secEl = document.getElementById('certifications');
           if (secEl && secEl.offsetTop <= scrollPos) {
             setActiveSection(sections[i]);
             break;
@@ -51,8 +53,22 @@ export default function Navbar({ onOpenResume }) {
   const handleNavClick = useCallback((href) => {
     playSound('click');
     setMobileMenuOpen(false);
-    const target = document.querySelector(href);
-    if (target) target.scrollIntoView({ behavior: 'smooth' });
+    let target = document.querySelector(href);
+    if (!target && href === '#certificates') {
+      target = document.querySelector('#certifications');
+    }
+    if (!target && href === '#certifications') {
+      target = document.querySelector('#certificates');
+    }
+    if (target) {
+      const navOffset = 80;
+      const elementPosition = target.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - navOffset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
   }, []);
 
   const handleSoundToggle = useCallback(() => {
